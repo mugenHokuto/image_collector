@@ -51,6 +51,16 @@ with st.sidebar:
     else:
         min_size = None
     
+    st.subheader("アクセス設定")
+    delay = st.number_input(
+        "アクセス間隔（秒）",
+        min_value=0.5,
+        max_value=10.0,
+        value=1.0,
+        step=0.5,
+        help="サーバーへの負荷を軽減するため、各リクエストの間に待機時間を設けます。推奨: 1秒以上"
+    )
+    
     start_button = st.button("📥 画像収集を開始", type="primary", use_container_width=True)
 
 # メインエリア
@@ -79,10 +89,11 @@ if start_button:
             
             crawler = BingImageCrawler(storage={'root_dir': folder_name})
             
+            # アクセス間隔を設定してサーバーへの負荷を軽減
             if min_size:
-                crawler.crawl(keyword=keyword, max_num=max_num, min_size=min_size)
+                crawler.crawl(keyword=keyword, max_num=max_num, min_size=min_size, delay=delay)
             else:
-                crawler.crawl(keyword=keyword, max_num=max_num)
+                crawler.crawl(keyword=keyword, max_num=max_num, delay=delay)
             
             progress_bar.progress(90)
             status_text.text("✅ 画像収集が完了しました！")
@@ -124,5 +135,6 @@ with st.expander("📖 使い方"):
     - 画像の収集には時間がかかる場合があります
     - インターネット接続が必要です
     - 収集した画像の著作権にご注意ください
+    - **アクセス間隔**: サーバーへの負荷を軽減し、IPアドレスのブロックを防ぐため、1秒以上の間隔を推奨します
     """)
 
