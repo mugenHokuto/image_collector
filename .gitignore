@@ -8,6 +8,9 @@ dataset/
 *.webp
 *.bmp
 
+# デプロイ手順書（Gitに含めない）
+DEPLOY.md
+
 # Python
 __pycache__/
 *.py[cod]
